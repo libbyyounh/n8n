@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: n8n_postgres
+    restart: always
+    privileged: true
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 15s
+      timeout: 15s
+      retries: 10
+    networks:
+      - app-network
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n_main
+    restart: always
+    privileged: true
+    ports:
+      - "5678:5678"
+    environment:
+      # --- 数据库配置 ---
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres # 依然使用服务名 postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+      
+      # --- 关键配置：公开的 Webhook 地址 ---
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      
+      # --- 其他基础配置 ---
+      - NODE_ENV=production
+      - GENERIC_TIMEZONE=Asia/Shanghai
+      - N8N_SECURE_COOKIE=${N8N_SECURE_COOKIE}
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    user: "node"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
