@@ -27,6 +27,7 @@ services:
     privileged: true
     ports:
       - "5678:5678"
+    user: "${UID}:${GID}"
     environment:
       # --- 数据库配置 ---
       - DB_TYPE=postgresdb
