@@ -46,7 +46,6 @@ services:
       - N8N_SECURE_COOKIE=${N8N_SECURE_COOKIE}
     volumes:
       - ./n8n_data:/home/node/.n8n
-    user: "node"
     depends_on:
       postgres:
         condition: service_healthy
