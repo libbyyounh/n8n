@@ -45,6 +45,7 @@ services:
       - GENERIC_TIMEZONE=Asia/Shanghai
       - N8N_SECURE_COOKIE=${N8N_SECURE_COOKIE}
       - N8N_DISABLE_WEBHOOK_TUNNEL=true
+      - N8N_TRUST_PROXY=1
     volumes:
       - ./n8n_data:/home/node/.n8n
     depends_on:
