@@ -21,7 +21,8 @@ services:
       - app-network
 
   n8n:
-    image: n8nio/n8n:latest
+    #image: n8nio/n8n:latest
+    build: .
     container_name: n8n_main
     restart: always
     privileged: true
@@ -43,6 +44,7 @@ services:
       - NODE_ENV=production
       - GENERIC_TIMEZONE=Asia/Shanghai
       - N8N_SECURE_COOKIE=${N8N_SECURE_COOKIE}
+      - N8N_DISABLE_WEBHOOK_TUNNEL=true
     volumes:
       - ./n8n_data:/home/node/.n8n
     depends_on:
