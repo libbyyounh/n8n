@@ -26,6 +26,11 @@ services:
     container_name: n8n_main
     restart: always
     privileged: true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"   # 每个日志文件最大 100MB
+        max-file: "3"     # 最多保留 3 个日志文件
     ports:
       - "5678:5678"
     environment:
@@ -47,6 +52,10 @@ services:
       - N8N_DISABLE_WEBHOOK_TUNNEL=true
       - N8N_TRUST_PROXY=1
       - N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE=true
+      - EXECUTIONS_DATA_PRUNE=true            # 启用自动清理
+      - EXECUTIONS_DATA_MAX_AGE=168           # 执行记录保留时间（小时），这里设置保留 7 天
+      - EXECUTIONS_DATA_PRUNE_MAX_COUNT=50000 # 最多保留多少条记录
+      - N8N_LOG_LEVEL=error                   # 默认为 info，改为 error 可以极大减少日志产量
     volumes:
       - ./n8n_data:/home/node/.n8n
     depends_on:
