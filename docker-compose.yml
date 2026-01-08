@@ -21,8 +21,8 @@ services:
       - app-network
 
   n8n:
-    #image: n8nio/n8n:latest
-    build: .
+    image: n8nio/n8n:latest
+    #build: .
     container_name: n8n_main
     restart: always
     privileged: true
