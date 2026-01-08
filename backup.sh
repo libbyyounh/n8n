@@ -4,7 +4,7 @@
 BACKUP_DIR="./backups/$(date +%Y%m%d_%H%M%S)"
 N8N_DATA_DIR="./n8n_data"
 POSTGRES_CONTAINER="n8n_postgres"
-POSTGRES_USER="postgres" # 如果你在 .env 里改了，请手动替换或读取
+POSTGRES_USER="n8nuser" # 如果你在 .env 里改了，请手动替换或读取
 POSTGRES_DB="n8n"       # 同上
 
 # 创建备份目录
